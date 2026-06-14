@@ -1,0 +1,483 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DAIF — Showcase</title><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}body{display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:"Segoe UI",Arial,sans-serif}</style></head><body>
+<h2 class="sr-only">OODA Strike — serious game portfolio showcase card for the Digital & AI Factory at ABS</h2>
+
+<style>
+  :root {
+    --amber:#f6a100;
+    --amber-dim:rgba(246,161,0,0.12);
+    --amber-border:rgba(246,161,0,0.3);
+    --bg-deep:#0b1326;
+    --bg-panel:#111827;
+    --bg-card:#1a2035;
+    --border-dim:rgba(255,255,255,0.07);
+    --text-muted:rgba(218,226,253,0.55);
+    --text-bright:#dae2fd;
+  }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  @keyframes gaugeGrow { from{width:0%} to{width:var(--w)} }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  @keyframes scanline { from{background-position:0 0} to{background-position:0 4px} }
+  @keyframes phaseIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
+  @keyframes crisisFlash { 0%,100%{background:transparent} 15%,85%{background:rgba(162,37,1,0.18)} }
+  @keyframes countDown { from{width:100%} to{width:0%} }
+
+  .ooda-wrap {
+    background:var(--bg-deep);
+    border-radius:12px;
+    overflow:hidden;
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--text-bright);
+    position:relative;
+  }
+
+  /* scanline overlay */
+  .ooda-wrap::before {
+    content:'';
+    position:absolute;inset:0;
+    background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(246,161,0,0.025) 2px,rgba(246,161,0,0.025) 4px);
+    pointer-events:none;z-index:1;
+  }
+
+  /* dot grid */
+  .ooda-wrap::after {
+    content:'';
+    position:absolute;inset:0;
+    background-image:radial-gradient(rgba(246,161,0,0.1) 1px,transparent 1px);
+    background-size:28px 28px;
+    pointer-events:none;z-index:0;opacity:0.4;
+  }
+
+  .inner { position:relative;z-index:2; }
+
+  /* Top bar */
+  .topbar {
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 16px;
+    background:rgba(0,0,0,0.55);
+    border-bottom:1px solid var(--border-dim);
+  }
+  .logo { display:flex;align-items:center;gap:8px; }
+  .logo-badge {
+    width:26px;height:26px;border-radius:4px;
+    background:var(--amber-dim);border:1px solid var(--amber-border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;
+  }
+  .logo-name { font-family:'Space Grotesk',system-ui,sans-serif;font-weight:800;font-size:13px;color:var(--amber);letter-spacing:-0.5px; }
+  .hud { display:flex;align-items:center;gap:12px; }
+  .timer-wrap { display:flex;align-items:center;gap:4px; }
+  .timer-icon { font-size:14px;color:var(--text-muted); }
+  .timer-val { font-family:'Space Grotesk',monospace;font-weight:800;font-size:20px;color:#fff;letter-spacing:-1px; }
+
+  /* Ticker */
+  .ticker-bar {
+    background:var(--amber);
+    color:#111;font-size:11px;font-weight:700;
+    padding:4px 0;overflow:hidden;
+    font-family:'Space Grotesk',monospace;letter-spacing:1.5px;text-transform:uppercase;
+  }
+  .ticker-inner { display:inline-block;white-space:nowrap;animation:ticker 14s linear infinite; }
+
+  /* Gauge row */
+  .gauges {
+    display:flex;gap:16px;padding:8px 16px;
+    background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border-dim);
+  }
+  .gauge-item { flex:1; }
+  .gauge-label { display:flex;justify-content:space-between;margin-bottom:4px; }
+  .gauge-name { font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted); }
+  .gauge-val { font-size:11px;font-weight:700;font-family:monospace; }
+  .gauge-track { height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden; }
+  .gauge-fill { height:100%;border-radius:2px;animation:gaugeGrow 1.2s ease both; }
+
+  /* Body */
+  .body { display:flex;min-height:220px; }
+
+  /* Sidebar */
+  .sidebar {
+    width:130px;flex-shrink:0;
+    background:rgba(0,0,0,0.4);border-right:1px solid var(--border-dim);
+    padding:10px 8px;
+  }
+  .sidebar-label { font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);padding:0 4px;margin-bottom:6px; }
+  .crisis-item {
+    padding:6px 8px;border-radius:4px;margin-bottom:4px;
+    border-left:2px solid transparent;
+    transition:all .3s;
+  }
+  .crisis-item.active { border-left-color:var(--amber);background:var(--amber-dim); }
+  .crisis-item.done { border-left-color:#22c55e;background:rgba(34,197,94,0.06); }
+  .crisis-num { font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase; }
+  .crisis-name { font-size:10px;font-weight:600;color:var(--text-bright);margin-top:1px; }
+
+  /* OODA phases */
+  .phase-tabs { display:flex;border-bottom:1px solid var(--border-dim); }
+  .phase-tab {
+    flex:1;padding:8px 4px;text-align:center;
+    border-bottom:2px solid transparent;
+  }
+  .phase-tab.active { border-bottom-color:var(--amber);background:var(--amber-dim); }
+  .phase-tab.done { border-bottom-color:#22c55e;background:rgba(34,197,94,0.06); }
+  .phase-letter { font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:16px; }
+  .phase-word { font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted); }
+
+  /* Phase timer */
+  .phase-timer { height:2px;background:rgba(255,255,255,0.06); }
+  .phase-fill { height:100%;background:var(--amber); }
+
+  /* Crisis content */
+  .crisis-content { flex:1;padding:12px 14px;overflow:hidden; }
+  .bani-tag {
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    padding:3px 8px;border-radius:3px;color:#fff;margin-bottom:8px;
+  }
+  .crisis-title { font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:15px;color:#fff;margin-bottom:6px;line-height:1.2; }
+  .crisis-desc { font-size:11px;color:var(--text-muted);line-height:1.6;margin-bottom:10px; }
+
+  /* Signal cards */
+  .signal-label { font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px; }
+  .signal { display:flex;align-items:flex-start;gap:8px;padding:6px 8px;background:rgba(255,255,255,0.04);border:1px solid var(--border-dim);border-radius:4px;margin-bottom:5px; }
+  .signal.selected-good { border-color:rgba(34,197,94,0.5);background:rgba(34,197,94,0.07); }
+  .signal.selected-bad  { border-color:rgba(162,37,1,0.5);background:rgba(162,37,1,0.07); }
+  .signal-source { font-size:9px;font-weight:700;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase; }
+  .signal-text { font-size:10px;color:var(--text-bright);line-height:1.5; }
+
+  /* Footer bar */
+  .footbar {
+    padding:8px 16px;background:rgba(0,0,0,0.5);
+    border-top:1px solid var(--border-dim);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .footbar-tag { font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted); }
+  .footbar-badges { display:flex;gap:6px; }
+  .badge {
+    font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    padding:3px 8px;border-radius:3px;border:1px solid;
+  }
+  .badge-amber { color:var(--amber);border-color:var(--amber-border);background:var(--amber-dim); }
+  .badge-green { color:#22c55e;border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.08); }
+
+  /* Meta card below */
+  .meta-card {
+    margin-top:0;
+    background:var(--color-background-secondary);
+    border:0.5px solid var(--color-border-tertiary);
+    border-radius:var(--border-radius-lg);
+    padding:16px 20px;
+  }
+  .meta-row { display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start; }
+  .meta-col { flex:1;min-width:140px; }
+  .meta-label { font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500; }
+  .meta-val { font-size:13px;color:var(--color-text-primary);font-weight:500; }
+  .pill {
+    display:inline-block;font-size:11px;font-weight:500;
+    padding:2px 10px;border-radius:20px;margin:2px 3px 2px 0;
+    background:var(--color-background-secondary);
+    border:0.5px solid var(--color-border-tertiary);
+    color:var(--color-text-secondary);
+  }
+</style>
+
+<div style="padding:0 0 16px;">
+
+  <!-- ══ SIMULATED GAME SCREENSHOT ══ -->
+  <div class="ooda-wrap" id="gameCard">
+    <div class="inner">
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <div class="logo">
+          <div class="logo-badge">⚡</div>
+          <span class="logo-name">OODA STRIKE</span>
+          <span style="color:var(--border-dim);margin:0 6px">|</span>
+          <span style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted)">Projet Phoenix · Serious Game</span>
+        </div>
+        <div class="hud">
+          <span class="timer-icon">⏱</span>
+          <span class="timer-val" id="timerVal">02:14</span>
+        </div>
+      </div>
+
+      <!-- Gauges -->
+      <div class="gauges">
+        <div class="gauge-item">
+          <div class="gauge-label"><span class="gauge-name">Clarté</span><span class="gauge-val" id="g1v" style="color:var(--amber)">74</span></div>
+          <div class="gauge-track"><div class="gauge-fill" id="g1" style="--w:74%;width:74%;background:var(--amber);transition:width .8s ease;"></div></div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-label"><span class="gauge-name">Résilience</span><span class="gauge-val" id="g2v" style="color:#22c55e">81</span></div>
+          <div class="gauge-track"><div class="gauge-fill" id="g2" style="--w:81%;width:81%;background:#22c55e;transition:width .8s ease;"></div></div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-label"><span class="gauge-name">Momentum</span><span class="gauge-val" id="g3v" style="color:#fb923c">68</span></div>
+          <div class="gauge-track"><div class="gauge-fill" id="g3" style="--w:68%;width:68%;background:#fb923c;transition:width .8s ease;"></div></div>
+        </div>
+      </div>
+
+      <!-- Ticker -->
+      <div class="ticker-bar">
+        <div class="ticker-inner">
+          ⚡ DISRUPTION 3 ACTIVE — ERREUR DE CALCUL STRUCTUREL — CYCLE OODA ACTIVÉ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ⚡ DISRUPTION 3 ACTIVE — ERREUR DE CALCUL STRUCTUREL — CYCLE OODA ACTIVÉ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="body">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-label">Disruptions</div>
+          <div class="crisis-item done">
+            <div class="crisis-num">01 · 00:20</div>
+            <div class="crisis-name" style="color:#22c55e">Rupture Stock ✓</div>
+          </div>
+          <div class="crisis-item done">
+            <div class="crisis-num">02 · 00:40</div>
+            <div class="crisis-name" style="color:#22c55e">Grève IA ✓</div>
+          </div>
+          <div class="crisis-item active">
+            <div class="crisis-num">03 · 01:00</div>
+            <div class="crisis-name">Erreur Calcul</div>
+          </div>
+          <div class="crisis-item">
+            <div class="crisis-num">04 · 01:20</div>
+            <div class="crisis-name">OPA Ingénieurs</div>
+          </div>
+          <div class="crisis-item">
+            <div class="crisis-num">05 · 01:40</div>
+            <div class="crisis-name">Réglementation</div>
+          </div>
+        </div>
+
+        <!-- Main panel -->
+        <div style="flex:1;display:flex;flex-direction:column;">
+
+          <!-- Phase tabs -->
+          <div class="phase-tabs">
+            <div class="phase-tab done" id="tab-O1">
+              <div class="phase-letter" style="color:#22c55e">O</div>
+              <div class="phase-word">Observe</div>
+            </div>
+            <div class="phase-tab done" id="tab-O2">
+              <div class="phase-letter" style="color:#fb923c">O</div>
+              <div class="phase-word">Orient</div>
+            </div>
+            <div class="phase-tab active" id="tab-D">
+              <div class="phase-letter" style="color:#22c55e">D</div>
+              <div class="phase-word">Decide</div>
+            </div>
+            <div class="phase-tab" id="tab-A">
+              <div class="phase-letter" style="color:#a78bfa">A</div>
+              <div class="phase-word">Act</div>
+            </div>
+          </div>
+
+          <!-- Phase timer bar -->
+          <div class="phase-timer">
+            <div class="phase-fill" id="phaseBar" style="width:42%;transition:width .5s linear;"></div>
+          </div>
+
+          <!-- Crisis content area -->
+          <div class="crisis-content" id="phaseContent">
+            <!-- populated by JS -->
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footbar">
+        <span class="footbar-tag">Module V · Leadership Adaptatif · ABS / UM6P</span>
+        <div class="footbar-badges">
+          <span class="badge badge-amber">7 Disruptions BANI</span>
+          <span class="badge badge-green">IA Coaching</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ META INFO CARD ══ -->
+  <div class="meta-card" style="margin-top:12px;">
+    <div class="meta-row">
+      <div class="meta-col">
+        <div class="meta-label">Type</div>
+        <div class="meta-val">Serious Game · eLearning HTML</div>
+      </div>
+      <div class="meta-col">
+        <div class="meta-label">Durée</div>
+        <div class="meta-val">~15 min · 7 crises temps réel</div>
+      </div>
+      <div class="meta-col">
+        <div class="meta-label">Public</div>
+        <div class="meta-val">Managers & Leaders ABS / UM6P</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <div class="meta-label">Cadres pédagogiques</div>
+      <span class="pill">Boucle OODA</span>
+      <span class="pill">Paradoxe de Stockdale</span>
+      <span class="pill">Hedgehog Concept</span>
+      <span class="pill">Flywheel vs Doom Loop</span>
+      <span class="pill">Monde BANI</span>
+      <span class="pill">Leadership Adaptatif Heifetz</span>
+    </div>
+    <div style="margin-top:10px;">
+      <div class="meta-label">Technologies</div>
+      <span class="pill">HTML / CSS / JS</span>
+      <span class="pill">Rise 360</span>
+      <span class="pill">IA Coaching (Claude API)</span>
+      <span class="pill">Debriefing génératif</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const phases = [
+  {
+    id:'observe',
+    html:`
+      <div style="animation:phaseIn .4s ease both">
+        <div class="bani-tag" style="background:rgba(162,37,1,0.3)">🌎 Monde Brittle</div>
+        <div class="crisis-title">Erreur de Calcul Majeure</div>
+        <div class="crisis-desc">Erreur structurelle découverte en phase 2. Coût estimé : 8M MAD. Livraison dans 10 semaines.</div>
+        <div class="signal-label">Filtrez les 2 sources les plus fiables :</div>
+        <div class="signal selected-good">
+          <div><div class="signal-source">📊 Audit Technique Interne</div><div class="signal-text">L'erreur n'affecte que la structure B. A et C sont conformes.</div></div>
+        </div>
+        <div class="signal selected-bad">
+          <div><div class="signal-source">💬 Chef de chantier</div><div class="signal-text">C'est foutu, il faut tout recommencer depuis zéro.</div></div>
+        </div>
+        <div class="signal selected-good">
+          <div><div class="signal-source">📋 Expert Externe</div><div class="signal-text">Option renforcement par injection : 3 sem. Option redesign : 6 sem.</div></div>
+        </div>
+      </div>`
+  },
+  {
+    id:'orient',
+    html:`
+      <div style="animation:phaseIn .4s ease both">
+        <div class="bani-tag" style="background:rgba(162,37,1,0.3)">🌎 Fait Brutal · Stockdale</div>
+        <div class="crisis-title">Orientez le défi</div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border-dim);border-radius:4px;padding:8px 10px;margin-bottom:6px;">
+          <div style="font-size:10px;font-weight:600;color:var(--text-muted);margin-bottom:4px;">Lecture Stockdale</div>
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;background:rgba(162,37,1,0.12);border-radius:3px;padding:6px 8px;font-size:10px;color:#ff9d9d;border:1px solid rgba(162,37,1,0.3)">
+              Réalité brutale : retard et coût réels sont inévitables.
+            </div>
+            <div style="flex:1;background:rgba(34,197,94,0.08);border-radius:3px;padding:6px 8px;font-size:10px;color:#6ee7a0;border:1px solid rgba(34,197,94,0.2)">
+              Espoir maintenu : solution technique existe, clause contractuelle protège.
+            </div>
+          </div>
+        </div>
+        <div style="background:rgba(246,161,0,0.08);border:1px solid var(--amber-border);border-radius:4px;padding:7px 10px;font-size:10px;color:var(--amber)">
+          ✓ Défi <strong>Technique ET Adaptatif</strong> — l'organisation doit apprendre de cette défaillance.
+        </div>
+      </div>`
+  },
+  {
+    id:'decide',
+    html:`
+      <div style="animation:phaseIn .4s ease both">
+        <div class="crisis-title" style="font-size:13px;margin-bottom:8px;">Flywheel Effect ou Doom Loop ?</div>
+        <div style="background:rgba(162,37,1,0.1);border:1px solid rgba(162,37,1,0.3);border-left:3px solid #a22501;border-radius:4px;padding:7px 10px;margin-bottom:5px;font-size:10px;">
+          <div style="font-weight:700;color:#ff9d9d;margin-bottom:2px;">✗ Doom Loop</div>
+          <div style="color:var(--text-muted)">Minimiser l'information, tenter de rattraper sans informer le client.</div>
+        </div>
+        <div style="background:rgba(34,197,94,0.09);border:1px solid rgba(34,197,94,0.35);border-left:3px solid #22c55e;border-radius:4px;padding:7px 10px;margin-bottom:5px;font-size:10px;">
+          <div style="font-weight:700;color:#6ee7a0;margin-bottom:2px;">✓ Effet Volant</div>
+          <div style="color:var(--text-muted)">Informer le client avec plan complet, activer clause contractuelle.</div>
+        </div>
+        <div style="background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-left:3px solid #7c3aed;border-radius:4px;padding:7px 10px;font-size:10px;position:relative;">
+          <div style="position:absolute;top:-1px;right:8px;background:#7c3aed;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:0 0 4px 4px;letter-spacing:.5px">SÉLECTIONNÉ</div>
+          <div style="font-weight:700;color:#c4b5fd;margin-bottom:2px;">✓ Espace Adaptatif</div>
+          <div style="color:var(--text-muted)">Proposer un «Partenariat de co-pilotage» au client + revue de processus.</div>
+        </div>
+      </div>`
+  },
+  {
+    id:'act',
+    html:`
+      <div style="animation:phaseIn .4s ease both">
+        <div class="crisis-title" style="font-size:13px;margin-bottom:8px;">Distribuez le travail adaptatif</div>
+        <div style="background:rgba(246,161,0,0.08);border:1px solid var(--amber-border);border-radius:4px;padding:7px 10px;margin-bottom:5px;font-size:10px;display:flex;gap:8px;align-items:center;">
+          <span style="font-size:18px">🤝</span>
+          <div>
+            <div style="font-weight:700;color:var(--amber);margin-bottom:2px;">Cellule de Crise Autonome ← Choix optimal</div>
+            <div style="color:var(--text-muted)">Expert technique sur la correction · PM sur le client · Vous en vigie stratégique.</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border-dim);border-radius:4px;padding:7px 10px;font-size:10px;display:flex;gap:8px;align-items:center;opacity:.6">
+          <span style="font-size:18px">🧑‍💼</span>
+          <div>
+            <div style="font-weight:600;color:var(--text-muted)">Supervision Directe</div>
+            <div style="color:var(--text-muted)">Centralisation — pénalise résilience équipe.</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.2);border-radius:4px;padding:6px 10px;font-size:10px;color:#6ee7a0;">
+          +8 Clarté · +8 Résilience · +10 Momentum
+        </div>
+      </div>`
+  }
+];
+
+let phaseIdx = 0;
+let timerSec = 134;
+let phaseBarPct = 42;
+let phaseBarDir = -1;
+let gaugeVals = [74, 81, 68];
+
+function renderPhase() {
+  document.getElementById('phaseContent').innerHTML = phases[phaseIdx].html;
+  const tabs = ['tab-O1','tab-O2','tab-D','tab-A'];
+  tabs.forEach((id,i) => {
+    const el = document.getElementById(id);
+    el.className = 'phase-tab';
+    if(i < phaseIdx) el.classList.add('done');
+    else if(i === phaseIdx) el.classList.add('active');
+  });
+}
+
+function padZ(n){return String(n).padStart(2,'0');}
+
+function tick() {
+  timerSec--;
+  if(timerSec < 0) timerSec = 179;
+  const m = Math.floor(timerSec/60);
+  const s = timerSec%60;
+  document.getElementById('timerVal').textContent = padZ(m)+':'+padZ(s);
+
+  phaseBarPct += phaseBarDir * 0.7;
+  if(phaseBarPct <= 2) { phaseBarPct = 2; phaseBarDir = 0; }
+  document.getElementById('phaseBar').style.width = phaseBarPct+'%';
+}
+
+function advancePhase(){
+  phaseIdx = (phaseIdx+1)%4;
+  phaseBarPct = 98;
+  phaseBarDir = -1;
+  renderPhase();
+
+  const deltas = [
+    [+6,-3,+2],[-2,+8,+3],[+5,+4,+7],[+3,+6,+5]
+  ];
+  const d = deltas[phaseIdx];
+  gaugeVals = gaugeVals.map((v,i) => Math.max(10,Math.min(100,v+d[i])));
+  const ids = ['g1','g2','g3'];
+  const vids = ['g1v','g2v','g3v'];
+  gaugeVals.forEach((v,i) => {
+    document.getElementById(ids[i]).style.width = v+'%';
+    document.getElementById(vids[i]).textContent = v;
+  });
+}
+
+renderPhase();
+setInterval(tick, 1000);
+setInterval(advancePhase, 4200);
+</script>
+</body></html>
