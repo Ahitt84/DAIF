@@ -1,0 +1,549 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DAIF — Showcase</title><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}body{display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:"Segoe UI",Arial,sans-serif}</style></head><body>
+
+<style>
+.ag-wrap{font-family:'Segoe UI',Arial,sans-serif;background:#111;border-radius:14px;overflow:hidden;max-width:720px;margin:0 auto}
+.ag-screen{background:linear-gradient(160deg,#1B4332 0%,#2D6A4F 100%);padding:0;position:relative;min-height:340px;overflow:hidden}
+.ag-topbar{background:#1B4332;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.ag-tb-left{display:flex;align-items:center;gap:8px}
+.ag-logo{background:#52B788;color:#1B4332;font-weight:900;font-size:10px;padding:3px 7px;border-radius:4px}
+.ag-title{color:#B7E4C7;font-size:11px;font-weight:700}
+.ag-prog-wrap{flex:1;max-width:160px;margin:0 12px}
+.ag-prog-bg{background:rgba(255,255,255,0.18);border-radius:4px;height:5px}
+.ag-prog-fill{background:linear-gradient(90deg,#52B788,#FFD166);border-radius:4px;height:5px;transition:width 0.8s ease}
+.ag-xp{color:#FFD166;font-weight:800;font-size:11px}
+.ag-scene{position:absolute;inset:0;opacity:0;transition:opacity 0.5s ease;padding:18px 20px;display:flex;flex-direction:column;justify-content:center}
+.ag-scene.active{opacity:1;position:relative}
+.ag-scene-label{font-size:9px;font-weight:800;color:#52B788;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ag-scene-label::after{content:'';flex:1;height:1px;background:rgba(82,183,136,0.3)}
+.ag-h1{font-family:'Arial Black',Impact,sans-serif;font-size:22px;color:#fff;margin-bottom:6px;text-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.ag-sub{color:#B7E4C7;font-size:12px;margin-bottom:14px;line-height:1.5}
+.ag-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.ag-pill{background:rgba(255,255,255,0.12);color:#fff;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:700}
+.ag-obj{background:rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px}
+.ag-obj-title{color:#FFD166;font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:800;margin-bottom:7px}
+.ag-obj-item{color:rgba(255,255,255,0.85);font-size:11px;padding:3px 0;display:flex;align-items:center;gap:6px}
+.ag-obj-dot{width:5px;height:5px;background:#52B788;border-radius:50%;flex-shrink:0}
+.ag-cta{background:#F4A261;color:#fff;border:none;border-radius:30px;padding:9px 18px;font-size:12px;font-weight:800;cursor:pointer;margin-top:12px;display:inline-block}
+.ag-rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.ag-rev-card{border-radius:12px;padding:14px 12px;border:2px solid rgba(82,183,136,0.4);background:rgba(255,255,255,0.06);transition:all 0.4s}
+.ag-rev-card.revealed{background:rgba(82,183,136,0.15);border-color:#52B788}
+.ag-rev-icon{font-size:22px;margin-bottom:5px}
+.ag-rev-q{font-weight:800;color:#B7E4C7;font-size:11px;margin-bottom:3px}
+.ag-rev-a{color:rgba(255,255,255,0.75);font-size:10px;line-height:1.45;display:none}
+.ag-rev-card.revealed .ag-rev-a{display:block}
+.ag-rev-hint{font-size:9px;color:#52B788;font-weight:700}
+.ag-rev-card.revealed .ag-rev-hint{display:none}
+.ag-soil-wrap{display:flex;gap:14px;align-items:flex-start;margin-top:4px}
+.ag-soil-col{flex-shrink:0;width:140px}
+.ag-layer{padding:8px 10px;border-radius:6px;margin-bottom:2px;font-weight:800;font-size:10px;color:#fff;cursor:pointer;border:2px solid transparent;transition:all 0.3s}
+.ag-layer.active{border-color:#FFD166;transform:translateX(5px)}
+.sl-o{background:#8B6914}
+.sl-a{background:#4A3728}
+.sl-b{background:#8B5E3C}
+.sl-c{background:#A67C52}
+.sl-r{background:#9E9E9E}
+.ag-soil-panel{flex:1;background:rgba(255,255,255,0.08);border-radius:12px;padding:14px;min-height:180px;border:1.5px solid rgba(82,183,136,0.3)}
+.ag-soil-name{font-family:'Arial Black',Impact,sans-serif;font-size:14px;margin-bottom:6px}
+.ag-soil-text{color:rgba(255,255,255,0.8);font-size:11px;line-height:1.55}
+.ag-soil-fact{background:#FFD166;border-radius:7px;padding:7px 10px;margin-top:8px;font-size:10px;font-weight:700;color:#1B4332}
+.ag-npk-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px}
+.ag-npk-card{border-radius:12px;padding:14px 10px;text-align:center;border:2px solid transparent;transition:all 0.4s;cursor:pointer}
+.ag-npk-card.active{transform:translateY(-3px)}
+.npk-n{background:rgba(46,125,50,0.25);border-color:rgba(82,183,136,0.5)}
+.npk-p{background:rgba(230,81,0,0.2);border-color:rgba(244,162,97,0.5)}
+.npk-k{background:rgba(21,101,192,0.2);border-color:rgba(116,179,206,0.5)}
+.ag-npk-letter{font-family:'Arial Black',Impact,sans-serif;font-size:34px;line-height:1}
+.ag-npk-name{font-weight:800;font-size:11px;color:#B7E4C7;margin:4px 0 2px}
+.ag-npk-role{font-size:10px;color:rgba(255,255,255,0.6);line-height:1.4}
+.ag-npk-detail{background:rgba(255,255,255,0.07);border-radius:10px;padding:12px;border:1.5px solid rgba(82,183,136,0.25);margin-top:8px;min-height:64px}
+.ag-npk-detail-title{font-weight:800;font-size:12px;color:#FFD166;margin-bottom:4px}
+.ag-npk-detail-text{font-size:10px;color:rgba(255,255,255,0.8);line-height:1.5}
+.ag-wc-scene{position:relative;background:linear-gradient(180deg,#1a5f8a 0%,#2d8cb8 30%,rgba(82,183,136,0.6) 55%,rgba(46,125,50,0.8) 75%,#8B5E3C 100%);border-radius:12px;min-height:170px;overflow:hidden;margin-top:4px}
+.ag-sun{position:absolute;top:10px;right:14px;width:38px;height:38px;background:#FFD166;border-radius:50%;box-shadow:0 0 14px rgba(255,209,102,0.6)}
+.ag-cloud{position:absolute;background:#fff;border-radius:30px;opacity:0.9}
+.ag-hs{position:absolute;background:rgba(255,255,255,0.88);border:1.5px solid #fff;border-radius:30px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer;color:#1B4332;transition:all 0.3s}
+.ag-hs.visited{background:#52B788;color:#fff;border-color:#2D6A4F}
+.ag-wc-info{background:rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;margin-top:8px;min-height:44px}
+.ag-wc-info-title{font-weight:800;font-size:12px;color:#52B788;margin-bottom:3px}
+.ag-wc-info-text{font-size:10px;color:rgba(255,255,255,0.8);line-height:1.5}
+.ag-farm{background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-top:4px;border:1.5px solid rgba(82,183,136,0.25)}
+.ag-farm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
+.ag-fs{background:rgba(255,255,255,0.06);border-radius:9px;padding:8px;text-align:center;border:1.5px solid rgba(82,183,136,0.2)}
+.ag-fs-val{font-family:'Arial Black',Impact,sans-serif;font-size:16px;color:#B7E4C7}
+.ag-fs-lbl{font-size:9px;color:rgba(255,255,255,0.6);font-weight:700;margin-top:2px}
+.ag-event{background:rgba(255,255,255,0.07);border-radius:10px;padding:12px}
+.ag-event-icon{font-size:22px;margin-bottom:5px}
+.ag-event-q{font-weight:800;font-size:11px;color:#B7E4C7;margin-bottom:8px;line-height:1.4}
+.ag-event-opts{display:grid;gap:5px}
+.ag-event-opt{background:rgba(255,255,255,0.08);border:1.5px solid rgba(82,183,136,0.25);border-radius:8px;padding:7px 10px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.85);text-align:left}
+.ag-event-opt.good{background:rgba(82,183,136,0.2);border-color:#52B788;color:#B7E4C7}
+.ag-prac-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.ag-prac{background:rgba(255,255,255,0.06);border:1.5px solid rgba(82,183,136,0.3);border-radius:10px;padding:10px 8px;text-align:center;transition:all 0.4s}
+.ag-prac.good{background:rgba(82,183,136,0.2);border-color:#52B788}
+.ag-prac.bad{background:rgba(244,162,97,0.15);border-color:#F4A261}
+.ag-prac-icon{font-size:20px;margin-bottom:4px}
+.ag-prac-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,0.8);line-height:1.3}
+.ag-tl{position:relative;padding:4px 0 4px 22px;margin-top:4px}
+.ag-tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#52B788,rgba(82,183,136,0.3));border-radius:2px}
+.ag-tl-item{position:relative;margin-bottom:10px}
+.ag-tl-dot{position:absolute;left:-18px;top:8px;width:12px;height:12px;border-radius:50%;background:#52B788;border:2px solid #1B4332;transition:all 0.3s}
+.ag-tl-item.active .ag-tl-dot{background:#FFD166}
+.ag-tl-card{background:rgba(255,255,255,0.06);border-radius:9px;padding:10px 12px;border:1.5px solid rgba(82,183,136,0.25)}
+.ag-tl-item.active .ag-tl-card{border-color:#FFD166}
+.ag-tl-year{font-family:'Arial Black',Impact,sans-serif;font-size:10px;color:#F4A261;margin-bottom:2px}
+.ag-tl-title{font-weight:800;font-size:11px;color:#B7E4C7;margin-bottom:3px}
+.ag-tl-text{font-size:10px;color:rgba(255,255,255,0.7);line-height:1.45;display:none}
+.ag-tl-item.active .ag-tl-text{display:block}
+.ag-results{text-align:center;padding:10px 0}
+.ag-trophy{font-size:52px;margin-bottom:6px}
+.ag-score{font-family:'Arial Black',Impact,sans-serif;font-size:42px;color:#52B788}
+.ag-score-lbl{font-size:12px;color:#B7E4C7;margin-bottom:14px}
+.ag-lvl-bg{background:rgba(255,255,255,0.15);border-radius:5px;height:8px;margin:0 auto 12px;max-width:280px;overflow:hidden}
+.ag-lvl-fill{background:linear-gradient(90deg,#52B788,#FFD166);height:8px;border-radius:5px;transition:width 1.2s ease}
+.ag-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.ag-badge{background:#FFD166;border-radius:10px;padding:7px 10px;text-align:center;min-width:62px}
+.ag-badge.locked{filter:grayscale(1);opacity:0.45}
+.ag-badge-i{font-size:18px}
+.ag-badge-l{font-size:8px;font-weight:800;color:#1B4332;margin-top:2px}
+.ag-cert{background:rgba(255,255,255,0.07);border:2px solid rgba(82,183,136,0.5);border-radius:12px;padding:14px;margin-top:4px}
+.ag-cert-title{font-family:'Arial Black',Impact,sans-serif;font-size:13px;color:#52B788;margin-bottom:3px}
+.ag-cert-name{font-size:16px;font-weight:800;color:#F4A261}
+.ag-cert-text{font-size:10px;color:rgba(255,255,255,0.65);margin:3px 0}
+.ag-cert-xp{font-size:13px;font-weight:800;color:#52B788;margin-top:6px}
+.ag-meta{background:#0e0e0e;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ag-meta-type{font-size:9px;font-weight:800;color:#52B788;text-transform:uppercase;letter-spacing:1.5px}
+.ag-meta-tags{display:flex;gap:5px;flex-wrap:wrap}
+.ag-tag{background:rgba(82,183,136,0.12);color:#52B788;border:1px solid rgba(82,183,136,0.3);border-radius:4px;padding:2px 8px;font-size:9px;font-weight:700}
+.ag-tag.fw{background:rgba(244,162,97,0.12);color:#F4A261;border-color:rgba(244,162,97,0.3)}
+.ag-nav-dots{display:flex;gap:5px;align-items:center;justify-content:center;padding:8px 0;background:#0e0e0e}
+.ag-nav-dot{width:6px;height:6px;border-radius:50%;background:rgba(82,183,136,0.3);transition:all 0.35s;cursor:pointer}
+.ag-nav-dot.cur{background:#52B788;width:18px;border-radius:4px}
+.ag-xp-pop{position:absolute;right:14px;top:10px;font-family:'Arial Black',Impact,sans-serif;font-size:14px;color:#FFD166;pointer-events:none;animation:xpup 1.5s ease forwards;text-shadow:0 2px 6px rgba(0,0,0,0.4)}
+@keyframes xpup{0%{opacity:0;transform:translateY(0) scale(0.5)}20%{opacity:1;transform:translateY(-10px) scale(1)}80%{opacity:1;transform:translateY(-28px)}100%{opacity:0;transform:translateY(-45px) scale(0.8)}}
+.ag-rain-d{position:absolute;width:2px;border-radius:40px;background:rgba(100,180,255,0.7);animation:agrain 1.4s linear infinite}
+@keyframes agrain{from{transform:translateY(-10px);opacity:1}to{transform:translateY(70px);opacity:0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.ag-confetti-p{position:absolute;border-radius:2px;animation:conf 2.5s ease forwards;pointer-events:none}
+@keyframes conf{to{transform:translateY(200px) rotate(540deg);opacity:0}}
+</style>
+
+<div class="ag-wrap">
+<div class="ag-screen">
+  <div class="ag-topbar">
+    <div class="ag-tb-left">
+      <div class="ag-logo">ABS</div>
+      <div class="ag-title">AgroLearn</div>
+    </div>
+    <div class="ag-prog-wrap">
+      <div class="ag-prog-bg"><div class="ag-prog-fill" id="ag-prog" style="width:0%"></div></div>
+    </div>
+    <div class="ag-xp" id="ag-xp-disp">★ 0 XP</div>
+  </div>
+
+  <div class="ag-scene active" id="sc-welcome" style="padding:20px 22px">
+    <div class="ag-scene-label">Écran d'accueil — Module 1</div>
+    <div style="font-size:52px;animation:float 3s ease-in-out infinite;text-align:center;margin-bottom:8px">🧑‍🌾</div>
+    <div class="ag-h1" style="text-align:center;font-size:20px">Introduction à l'Agronomie</div>
+    <div class="ag-sub" style="text-align:center">Découvrez la science qui nourrit le monde !</div>
+    <div class="ag-pills" style="justify-content:center">
+      <span class="ag-pill">⏱ ~10 min</span>
+      <span class="ag-pill">🎮 Gamifié</span>
+      <span class="ag-pill">🌱 Débutant</span>
+      <span class="ag-pill">★ 300+ XP</span>
+    </div>
+    <div class="ag-obj">
+      <div class="ag-obj-title">🎯 Objectifs</div>
+      <div class="ag-obj-item"><span class="ag-obj-dot"></span>Définir l'agronomie et son importance mondiale</div>
+      <div class="ag-obj-item"><span class="ag-obj-dot"></span>Identifier les horizons du sol et leur rôle</div>
+      <div class="ag-obj-item"><span class="ag-obj-dot"></span>Expliquer les nutriments NPK essentiels</div>
+      <div class="ag-obj-item"><span class="ag-obj-dot"></span>Gérer une ferme et prendre de bonnes décisions</div>
+    </div>
+  </div>
+
+  <div class="ag-scene" id="sc-reveal" style="padding:16px 18px">
+    <div class="ag-scene-label">S1 — Qu'est-ce que l'agronomie ? · Cartes révélables</div>
+    <div class="ag-h1" style="font-size:16px">🌾 Révélez les cartes !</div>
+    <div class="ag-sub" style="margin-bottom:10px">Cliquez pour découvrir. 4/4 cartes à révéler.</div>
+    <div class="ag-rev-grid" id="rev-grid">
+      <div class="ag-rev-card revealed">
+        <div class="ag-rev-icon">📚</div>
+        <div class="ag-rev-q">Définition</div>
+        <div class="ag-rev-a">Science qui étudie les techniques de production végétale et les mécanismes du sol.</div>
+      </div>
+      <div class="ag-rev-card">
+        <div class="ag-rev-icon">🌍</div>
+        <div class="ag-rev-q">Importance mondiale</div>
+        <div class="ag-rev-hint">👆 Cliquez pour révéler</div>
+        <div class="ag-rev-a">Nourrit 8 milliards de personnes et représente 25% du PIB des pays en développement.</div>
+      </div>
+      <div class="ag-rev-card">
+        <div class="ag-rev-icon">🔬</div>
+        <div class="ag-rev-q">Disciplines liées</div>
+        <div class="ag-rev-hint">👆 Cliquez pour révéler</div>
+        <div class="ag-rev-a">Chimie, biologie, météorologie, génétique, pédologie et économie rurale.</div>
+      </div>
+      <div class="ag-rev-card">
+        <div class="ag-rev-icon">🇲🇦</div>
+        <div class="ag-rev-q">Au Maroc</div>
+        <div class="ag-rev-hint">👆 Cliquez pour révéler</div>
+        <div class="ag-rev-a">Plan Maroc Vert → Génération Green : leader africain de la phosphate et de l'agri-tech.</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:#52B788;font-weight:700;text-align:center;margin-top:10px" id="rev-prog">1 / 4 révélées</div>
+  </div>
+
+  <div class="ag-scene" id="sc-soil" style="padding:16px 18px">
+    <div class="ag-scene-label">S2 — Profil du Sol · Diagramme interactif</div>
+    <div class="ag-h1" style="font-size:16px">🌍 Les horizons du sol</div>
+    <div class="ag-soil-wrap">
+      <div class="ag-soil-col">
+        <div class="ag-layer sl-o active" id="sl-o">🍂 O — Organique</div>
+        <div class="ag-layer sl-a" id="sl-a">🌱 A — Arable</div>
+        <div class="ag-layer sl-b" id="sl-b">🪨 B — Sous-sol</div>
+        <div class="ag-layer sl-c" id="sl-c">💎 C — Roche altérée</div>
+        <div class="ag-layer sl-r" id="sl-r">⛰️ R — Bedrock</div>
+      </div>
+      <div class="ag-soil-panel" id="soil-panel">
+        <div class="ag-soil-name" style="color:#8B6914">🍂 Horizon O — Matière Organique</div>
+        <div class="ag-soil-text">Des millions de micro-organismes décomposent la matière organique en humus. Moteur de la fertilité du sol.</div>
+        <div class="ag-soil-fact">🐛 1 poignée de sol contient plus d'organismes que d'humains sur Terre !</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ag-scene" id="sc-npk" style="padding:16px 18px">
+    <div class="ag-scene-label">S3 — Nutriments NPK · Cartes interactives + Slider</div>
+    <div class="ag-h1" style="font-size:16px">🧪 Les nutriments essentiels</div>
+    <div class="ag-npk-grid">
+      <div class="ag-npk-card npk-n active" id="npk-n">
+        <div class="ag-npk-letter" style="color:#52B788">N</div>
+        <div class="ag-npk-name">Azote</div>
+        <div class="ag-npk-role">Croissance foliaire & chlorophylle</div>
+      </div>
+      <div class="ag-npk-card npk-p" id="npk-p">
+        <div class="ag-npk-letter" style="color:#F4A261">P</div>
+        <div class="ag-npk-name">Phosphore</div>
+        <div class="ag-npk-role">Racines, floraison & ATP</div>
+      </div>
+      <div class="ag-npk-card npk-k" id="npk-k">
+        <div class="ag-npk-letter" style="color:#74B3CE">K</div>
+        <div class="ag-npk-name">Potassium</div>
+        <div class="ag-npk-role">Résistance & qualité des fruits</div>
+      </div>
+    </div>
+    <div class="ag-npk-detail" id="npk-detail">
+      <div class="ag-npk-detail-title">N — Azote · Au cœur de la photosynthèse</div>
+      <div class="ag-npk-detail-text">Carence → feuilles jaunes (chlorose). Sources : urée (46% N), nitrate d'ammonium. Khouribga fournit P à l'échelle mondiale !</div>
+    </div>
+  </div>
+
+  <div class="ag-scene" id="sc-water" style="padding:16px 18px">
+    <div class="ag-scene-label">S6 — Cycle de l'eau · Hotspots interactifs</div>
+    <div class="ag-h1" style="font-size:16px">💧 L'eau en agriculture</div>
+    <div class="ag-wc-scene" id="wc-scene">
+      <div class="ag-sun"></div>
+      <div class="ag-cloud" style="width:55px;height:20px;top:14px;left:48px;animation:float 4s ease-in-out infinite"></div>
+      <div class="ag-cloud" style="width:70px;height:24px;top:10px;left:160px;opacity:0.85;animation:float 4s ease-in-out infinite;animation-delay:1.5s"></div>
+      <div class="ag-rain-d" style="right:50px;top:80px;height:10px;animation-delay:0s"></div>
+      <div class="ag-rain-d" style="right:62px;top:80px;height:8px;animation-delay:0.3s"></div>
+      <div class="ag-rain-d" style="right:42px;top:80px;height:12px;animation-delay:0.6s"></div>
+      <div class="ag-hs visited" style="top:36px;left:75px" id="wh-evap">☀️ Évaporation</div>
+      <div class="ag-hs" style="top:6px;left:195px" id="wh-nuage">☁️ Nuages</div>
+      <div class="ag-hs" style="top:55px;right:10px" id="wh-pluie">🌧️ Pluie</div>
+      <div class="ag-hs" style="bottom:68px;right:14px" id="wh-inf">🌱 Infiltration</div>
+      <div class="ag-hs" style="bottom:42px;left:80px" id="wh-irr">💦 Irrigation</div>
+      <div class="ag-hs" style="bottom:42px;left:190px" id="wh-transp">🌿 Transpiration</div>
+    </div>
+    <div class="ag-wc-info" id="wc-info">
+      <div class="ag-wc-info-title">☀️ Évaporation</div>
+      <div class="ag-wc-info-text">La chaleur transforme l'eau en vapeur. L'évapotranspiration est une perte à compenser par l'irrigation.</div>
+    </div>
+    <div style="font-size:9px;font-weight:700;color:#52B788;text-align:center;margin-top:6px" id="wc-prog-lbl">1 / 6 étapes explorées</div>
+  </div>
+
+  <div class="ag-scene" id="sc-farm" style="padding:16px 18px">
+    <div class="ag-scene-label">S7 — Gérez votre Ferme ! · Simulation saisonnière</div>
+    <div class="ag-h1" style="font-size:16px">🚜 Décision Ferme — Saison 2/4</div>
+    <div class="ag-farm">
+      <div class="ag-farm-stats">
+        <div class="ag-fs"><div class="ag-fs-val">95</div><div class="ag-fs-lbl">🌍 Sol</div></div>
+        <div class="ag-fs"><div class="ag-fs-val">65</div><div class="ag-fs-lbl">💧 Eau m³</div></div>
+        <div class="ag-fs"><div class="ag-fs-val" style="color:#52B788">+2t</div><div class="ag-fs-lbl">🌾 Récolte</div></div>
+        <div class="ag-fs"><div class="ag-fs-val" style="color:#FFD166">+20</div><div class="ag-fs-lbl">★ XP Ferme</div></div>
+      </div>
+      <div class="ag-event">
+        <div class="ag-event-icon">☀️</div>
+        <div class="ag-event-q">La sécheresse s'installe. L'eau se fait rare. Comment irriguez-vous ?</div>
+        <div class="ag-event-opts">
+          <div class="ag-event-opt good">✅ Goutte-à-goutte ciblé sur les racines</div>
+          <div class="ag-event-opt">○ Aspersion sur tout le champ</div>
+          <div class="ag-event-opt">○ Attendre les prochaines pluies</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ag-scene" id="sc-prac" style="padding:16px 18px">
+    <div class="ag-scene-label">S8 — Agriculture Durable · Classifiez les pratiques</div>
+    <div class="ag-h1" style="font-size:16px">♻️ Pratiques durables vs néfastes</div>
+    <div class="ag-sub" style="margin-bottom:6px">Vert = durable · Orange = à éviter</div>
+    <div class="ag-prac-grid">
+      <div class="ag-prac good"><div class="ag-prac-icon">💧</div><div class="ag-prac-lbl">Goutte-à-goutte</div></div>
+      <div class="ag-prac bad"><div class="ag-prac-icon">🚿</div><div class="ag-prac-lbl">Irrigation par inondation</div></div>
+      <div class="ag-prac good"><div class="ag-prac-icon">🌿</div><div class="ag-prac-lbl">Compostage naturel</div></div>
+      <div class="ag-prac bad"><div class="ag-prac-icon">☢️</div><div class="ag-prac-lbl">Pesticides intensifs</div></div>
+      <div class="ag-prac good"><div class="ag-prac-icon">🔄</div><div class="ag-prac-lbl">Rotation cultures</div></div>
+      <div class="ag-prac good"><div class="ag-prac-icon">🐛</div><div class="ag-prac-lbl">Lutte biologique</div></div>
+    </div>
+    <div style="background:rgba(82,183,136,0.15);border-radius:9px;padding:9px 12px;margin-top:8px;font-size:10px;font-weight:700;color:#52B788;border:1.5px solid rgba(82,183,136,0.35)">🌟 Excellent ! 5/6 bonnes pratiques identifiées. +35 XP !</div>
+  </div>
+
+  <div class="ag-scene" id="sc-tl" style="padding:16px 18px">
+    <div class="ag-scene-label">S9 — Histoire de l'agronomie · Timeline interactive</div>
+    <div class="ag-h1" style="font-size:16px">📜 Un voyage dans le temps</div>
+    <div class="ag-tl">
+      <div class="ag-tl-item active">
+        <div class="ag-tl-dot"></div>
+        <div class="ag-tl-card">
+          <div class="ag-tl-year">~10 000 av. J.-C.</div>
+          <div class="ag-tl-title">🌾 Naissance de l'agriculture</div>
+          <div class="ag-tl-text">Dans le Croissant Fertile, les humains commencent à cultiver l'orge et le blé. La révolution néolithique — le tournant le plus décisif de l'histoire humaine.</div>
+        </div>
+      </div>
+      <div class="ag-tl-item">
+        <div class="ag-tl-dot"></div>
+        <div class="ag-tl-card">
+          <div class="ag-tl-year">1840</div>
+          <div class="ag-tl-title">🧪 Liebig et la chimie agricole</div>
+        </div>
+      </div>
+      <div class="ag-tl-item">
+        <div class="ag-tl-dot"></div>
+        <div class="ag-tl-card">
+          <div class="ag-tl-year">1960s</div>
+          <div class="ag-tl-title">🌾 La Révolution Verte</div>
+        </div>
+      </div>
+      <div class="ag-tl-item">
+        <div class="ag-tl-dot"></div>
+        <div class="ag-tl-card">
+          <div class="ag-tl-year">Aujourd'hui 🛰️</div>
+          <div class="ag-tl-title">Agriculture numérique & agroécologie</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.55);text-align:center;margin-top:6px">3 / 6 événements explorés</div>
+  </div>
+
+  <div class="ag-scene" id="sc-results" style="padding:16px 18px">
+    <div class="ag-scene-label">S11 — Résultats & Certificat</div>
+    <div class="ag-results">
+      <div class="ag-trophy">🏆</div>
+      <div class="ag-score">8/9</div>
+      <div class="ag-score-lbl">Exceptionnel ! Vous êtes un vrai agronome en herbe !</div>
+      <div class="ag-lvl-bg"><div class="ag-lvl-fill" id="ag-lvl" style="width:0%"></div></div>
+      <div class="ag-badges">
+        <div class="ag-badge"><div class="ag-badge-i">📖</div><div class="ag-badge-l">Curieux</div></div>
+        <div class="ag-badge"><div class="ag-badge-i">🌍</div><div class="ag-badge-l">Géologue</div></div>
+        <div class="ag-badge"><div class="ag-badge-i">🧪</div><div class="ag-badge-l">Chimiste</div></div>
+        <div class="ag-badge"><div class="ag-badge-i">💧</div><div class="ag-badge-l">Hydrologue</div></div>
+        <div class="ag-badge locked"><div class="ag-badge-i">🎯</div><div class="ag-badge-l">Pro Cultures</div></div>
+        <div class="ag-badge"><div class="ag-badge-i">🏆</div><div class="ag-badge-l">Quiz Champ</div></div>
+      </div>
+      <div class="ag-cert">
+        <div class="ag-cert-title">🌾 Certificat d'Initiation à l'Agronomie</div>
+        <div class="ag-cert-text">Ce certificat est décerné à</div>
+        <div class="ag-cert-name">L'Agronome en Herbe 🌱</div>
+        <div class="ag-cert-text">Module 1 — Introduction à l'Agronomie · UM6P/ABS × OCP NutriCrops</div>
+        <div class="ag-cert-xp" id="cert-xp">★ XP Total : 0</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ag-nav-dots" id="nav-dots"></div>
+
+<div class="ag-meta">
+  <div>
+    <div class="ag-meta-type">Gamified eLearning · Rise 360</div>
+    <div style="color:rgba(255,255,255,0.45);font-size:9px;margin-top:2px">UM6P/ABS × OCP NutriCrops · Module 1 · 12 scènes · 300+ XP</div>
+  </div>
+  <div class="ag-meta-tags">
+    <span class="ag-tag">Bloom L1–L3</span>
+    <span class="ag-tag">Kolb</span>
+    <span class="ag-tag">Gamification</span>
+    <span class="ag-tag fw">HTML/CSS/JS</span>
+    <span class="ag-tag fw">Rise 360</span>
+    <span class="ag-tag fw">HeyGen</span>
+  </div>
+</div>
+</div>
+
+<script>
+const scenes=[
+  {id:'sc-welcome',prog:0,xp:0,label:'Accueil'},
+  {id:'sc-reveal',prog:10,xp:10,label:'S1 Révél.'},
+  {id:'sc-soil',prog:22,xp:25,label:'S2 Sol'},
+  {id:'sc-npk',prog:33,xp:50,label:'S3 NPK'},
+  {id:'sc-water',prog:50,xp:80,label:'S6 Eau'},
+  {id:'sc-farm',prog:65,xp:100,label:'S7 Ferme'},
+  {id:'sc-prac',prog:75,xp:135,label:'S8 Pratiques'},
+  {id:'sc-tl',prog:88,xp:160,label:'S9 Timeline'},
+  {id:'sc-results',prog:100,xp:210,label:'S11 Résultats'}
+];
+
+let cur=0,timer=null,autoTimer=null,xpDisplayed=0,xpTarget=0;
+const DELAY=4200;
+
+const dots=document.getElementById('nav-dots');
+scenes.forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='ag-nav-dot'+(i===0?' cur':'');
+  d.addEventListener('click',()=>{clearAuto();showScene(i);startAuto();});
+  dots.appendChild(d);
+});
+
+function animXP(target){
+  xpTarget=target;
+  clearInterval(timer);
+  timer=setInterval(()=>{
+    if(xpDisplayed<xpTarget){xpDisplayed+=5;document.getElementById('ag-xp-disp').textContent='★ '+Math.min(xpDisplayed,xpTarget)+' XP';}
+    else clearInterval(timer);
+  },30);
+}
+
+function showXPPop(scene){
+  if(scene.xp===0) return;
+  const p=document.createElement('div');
+  p.className='ag-xp-pop';
+  p.textContent='+'+scene.xp+' XP';
+  const wrapper=document.querySelector('.ag-screen');
+  wrapper.style.position='relative';
+  wrapper.appendChild(p);
+  setTimeout(()=>p.remove(),1600);
+}
+
+function showScene(idx){
+  const prev=scenes[cur];
+  const next=scenes[idx];
+  document.getElementById(prev.id).classList.remove('active');
+  document.getElementById(next.id).classList.add('active');
+  cur=idx;
+  document.getElementById('ag-prog').style.width=next.prog+'%';
+  animXP(next.xp);
+  if(idx===scenes.length-1){
+    setTimeout(()=>{
+      document.getElementById('ag-lvl').style.width='88%';
+      document.getElementById('cert-xp').textContent='★ XP Total : 210';
+    },300);
+  }
+  document.querySelectorAll('.ag-nav-dot').forEach((d,i)=>{
+    d.className='ag-nav-dot'+(i===idx?' cur':'');
+  });
+  showXPPop(next);
+}
+
+function advance(){showScene((cur+1)%scenes.length);}
+
+function startAuto(){
+  clearInterval(autoTimer);
+  autoTimer=setInterval(advance,DELAY);
+}
+
+function clearAuto(){clearInterval(autoTimer);}
+
+const soilData={
+  'sl-o':{col:'#8B6914',name:'🍂 Horizon O — Matière Organique',desc:'Des millions de micro-organismes décomposent la matière organique en humus. Moteur de la fertilité.',fact:'🐛 1 poignée de sol contient plus d\'organismes que d\'humains sur Terre !'},
+  'sl-a':{col:'#4A3728',name:'🌱 Horizon A — La Terre Arable',desc:'La couche la plus précieuse — riche en humus, minéraux et nutriments. Les racines y prospèrent.',fact:'⏰ Il faut ~500 ans pour former 2 cm d\'Horizon A naturellement !'},
+  'sl-b':{col:'#8B5E3C',name:'🪨 Horizon B — Le Sous-sol',desc:'Zone d\'accumulation des minéraux. Crucial pour la rétention d\'eau et le drainage.',fact:'💧 Régule l\'infiltration vers les nappes phréatiques.'},
+  'sl-c':{col:'#A67C52',name:'💎 Horizon C — Roche Altérée',desc:'La roche mère en désagrégation. Fournit les minéraux qui remontent vers les horizons supérieurs.',fact:'🌍 Détermine si le sol sera argileux, sableux ou calcaire.'},
+  'sl-r':{col:'#9E9E9E',name:'⛰️ Roche Mère — Bedrock',desc:'La roche originelle non altérée, base de tout profil pédologique.',fact:'⏳ La formation d\'un sol complet prend entre 10 000 et 100 000 ans !'}
+};
+
+const npkData={
+  n:{title:'N — Azote · Croissance foliaire & photosynthèse',text:'Carence → feuilles jaunes (chlorose). Sources : urée (46% N), nitrate d\'ammonium.'},
+  p:{title:'P — Phosphore · Racines, floraison & ATP',text:'Carence → feuilles violacées. Sources : Phosphate de Khouribga (Maroc !), superphosphate.'},
+  k:{title:'K — Potassium · Résistance & qualité',text:'Renforce la résistance aux maladies et au stress hydrique. Sources : KCl, sulfate de potasse.'}
+};
+
+const wcData={
+  evap:{title:'☀️ Évaporation',text:'La chaleur transforme l\'eau en vapeur. Perte hydrique à compenser par l\'irrigation.'},
+  nuage:{title:'☁️ Formation des nuages',text:'La vapeur monte, se refroidit et se condense. Peut voyager des milliers de km.'},
+  pluie:{title:'🌧️ Précipitations',text:'Retombe sous forme de pluie. Au Maroc : 350 à 700 mm/an selon les régions.'},
+  inf:{title:'🌱 Infiltration',text:'L\'eau alimente les nappes phréatiques. La surexploitation menace plusieurs nappes au Maroc.'},
+  irr:{title:'💦 Irrigation agricole',text:'85% des prélèvements d\'eau au Maroc. Le goutte-à-goutte réduit la consommation de 40-60%.'},
+  transp:{title:'🌿 Transpiration',text:'1 ha de maïs peut transpirer 5 000 litres par jour ! Ce processus rafraîchit l\'atmosphère.'}
+};
+
+let soilTimer=null,npkTimer=null,wcTimer=null,revTimer=null,tlTimer=null;
+const soilKeys=Object.keys(soilData),npkKeys=['n','p','k'],wcKeys=Object.keys(wcData);
+let sIdx=0,nIdx=0,wIdx=0,rIdx=0,tlIdx=0;
+
+function cycleSoil(){
+  document.querySelectorAll('.ag-layer').forEach(l=>l.classList.remove('active'));
+  const key=soilKeys[sIdx%soilKeys.length],d=soilData[key];
+  document.getElementById(key).classList.add('active');
+  document.getElementById('soil-panel').innerHTML='<div class="ag-soil-name" style="color:'+d.col+'">'+d.name+'</div><div class="ag-soil-text">'+d.desc+'</div><div class="ag-soil-fact">'+d.fact+'</div>';
+  sIdx++;
+}
+
+function cycleNPK(){
+  document.querySelectorAll('.ag-npk-card').forEach(c=>c.classList.remove('active'));
+  const key=npkKeys[nIdx%3],d=npkData[key];
+  document.getElementById('npk-'+key).classList.add('active');
+  document.getElementById('npk-detail').innerHTML='<div class="ag-npk-detail-title">'+d.title+'</div><div class="ag-npk-detail-text">'+d.text+'</div>';
+  nIdx++;
+}
+
+function cycleWater(){
+  const keys=Object.keys(wcData),key=keys[wIdx%keys.length],d=wcData[key];
+  document.getElementById('wc-info').innerHTML='<div class="ag-wc-info-title">'+d.title+'</div><div class="ag-wc-info-text">'+d.text+'</div>';
+  document.querySelectorAll('.ag-hs').forEach(h=>h.classList.remove('visited'));
+  const el=document.getElementById('wh-'+key);
+  if(el) el.classList.add('visited');
+  document.getElementById('wc-prog-lbl').textContent=(wIdx+1)+' / 6 étapes explorées';
+  wIdx++;
+}
+
+function cycleReveal(){
+  const cards=document.querySelectorAll('.ag-rev-card');
+  if(rIdx<cards.length) cards[rIdx].classList.add('revealed');
+  rIdx++;
+  document.getElementById('rev-prog').textContent=Math.min(rIdx,4)+' / 4 révélées';
+  if(rIdx>=4) rIdx=0;
+}
+
+function cycleTL(){
+  document.querySelectorAll('.ag-tl-item').forEach(i=>i.classList.remove('active'));
+  const items=document.querySelectorAll('.ag-tl-item');
+  items[tlIdx%items.length].classList.add('active');
+  tlIdx++;
+}
+
+function clearSceneTimers(){clearInterval(soilTimer);clearInterval(npkTimer);clearInterval(wcTimer);clearInterval(revTimer);clearInterval(tlTimer);}
+
+function onSceneEnter(idx){
+  clearSceneTimers();
+  if(idx===1){rIdx=0;document.querySelectorAll('.ag-rev-card').forEach(c=>c.classList.remove('revealed'));revTimer=setInterval(cycleReveal,900);}
+  else if(idx===2){cycleS();soilTimer=setInterval(cycleS,1200);}
+  else if(idx===3){cycleNPK();npkTimer=setInterval(cycleNPK,1300);}
+  else if(idx===4){wIdx=0;cycleWater();wcTimer=setInterval(cycleWater,1100);}
+  else if(idx===7){tlIdx=0;cycleTL();tlTimer=setInterval(cycleTL,1000);}
+}
+function cycleS(){const key=soilKeys[sIdx%soilKeys.length],d=soilData[key];document.querySelectorAll('.ag-layer').forEach(l=>l.classList.remove('active'));document.getElementById(key).classList.add('active');document.getElementById('soil-panel').innerHTML='<div class="ag-soil-name" style="color:'+d.col+'">'+d.name+'</div><div class="ag-soil-text">'+d.desc+'</div><div class="ag-soil-fact">'+d.fact+'</div>';sIdx++;}
+
+const origAdvance=advance;
+function advanceWithEnter(){
+  const nextIdx=(cur+1)%scenes.length;
+  origAdvance();
+  onSceneEnter(nextIdx);
+}
+
+clearInterval(autoTimer);
+autoTimer=setInterval(advanceWithEnter,DELAY);
+
+dots.querySelectorAll('.ag-nav-dot').forEach((d,i)=>{
+  d.onclick=()=>{clearAuto();showScene(i);onSceneEnter(i);clearInterval(autoTimer);autoTimer=setInterval(advanceWithEnter,DELAY);};
+});
+</script>
+</body></html>
